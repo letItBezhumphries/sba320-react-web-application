@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 import useFetch from '../hooks/useFetch';
 import { getMonsters, getMonstersPage } from '../utility/requests';
-import { get } from 'mongoose';
 
 export const MonstersContext = createContext({
   monstersList: [],

@@ -247,7 +247,6 @@ tbody .trow {
 .img-container {
   display: flex;
   justify-content: space-between;
-  background-color: purple;
 }
 
 .fav-btn {
