@@ -21,7 +21,8 @@ const MonstersScreen = () => {
   // passing in [] as second argument for initialValue for state
   const [currentMonsterIndex, setCurrentMonsterIndex] = useState(0);
 
-  const monstersList = useContext(MonstersContext).monstersList;
+  const { monstersList, isLoading, errorThrown, nextPage, prevPage } =
+    useContext(MonstersContext);
 
   console.log('monstersList', monstersList);
 
@@ -89,15 +90,16 @@ const MonstersScreen = () => {
     <div id='monsters'>
       <h2 className='page-header'>
         Search For Monsters{' '}
-        <Button className='view-favs-btn' onClick={handleShow}></Button>
-        {/* <Button className='view-favs-btn'>View Your Favorites</Button> */}
+        <Button className='view-favs-btn' onClick={handleShow}>
+          View Your Favorites
+        </Button>
       </h2>
-      {loading ? (
+      {isLoading ? (
         <Loader />
-      ) : error ? (
+      ) : errorThrown ? (
         <Error
           title='There was an error fetching monsters'
-          message={error.message}
+          message={errorThrown.message}
         />
       ) : (
         <div className='page-inner-container'>
@@ -121,8 +123,8 @@ const MonstersScreen = () => {
               </button>
             </div>
             <ul>
-              {!loading && pageData
-                ? pageData.map((monster, idx) => (
+              {!isLoading && monstersList
+                ? monstersList.map((monster, idx) => (
                     <li key={idx}>
                       <button
                         className='monster-btn'
@@ -136,11 +138,11 @@ const MonstersScreen = () => {
             </ul>
           </div>
           <section className='current-monster-view'>
-            {!loading && currentMonster ? (
+            {!isLoading && currentMonster ? (
               <CurrentMonsterView
                 monster={currentMonster}
-                loading={loading}
-                error={error}
+                loading={isLoading}
+                error={errorThrown}
               ></CurrentMonsterView>
             ) : (
               <Loader />

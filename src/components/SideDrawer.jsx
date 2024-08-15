@@ -4,12 +4,12 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import MonsterCard from './MonsterCard';
 import { MonstersContext } from '../context/monsters-context';
 
-const SideDrawer = ({ show, handleClose }) => {
+const SideDrawer = ({ show, handleClose, ...props }) => {
   const favorites = useContext(MonstersContext).monstersList.filter(
     (monster) => monster.isFav === true
   );
 
-  console.log('in SideDrawer favs:', favorites);
+  console.log('in SideDrawer favs:', favorites, 'show:', show);
   return (
     <Offcanvas
       show={show}
@@ -18,7 +18,7 @@ const SideDrawer = ({ show, handleClose }) => {
       placement='end'
       className='side-drawer'
     >
-      <Offcanvas.Header closeButton>
+      <Offcanvas.Header closeButton={true} closeVariant='white'>
         <Offcanvas.Title>Your Favorites</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>

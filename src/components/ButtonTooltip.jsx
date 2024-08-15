@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { MonstersContext } from '../context/monsters-context';
 
 const ButtonTooltip = ({ monster }) => {
+  const { isFav } = monster;
+  console.log('isFav in button tooltip:', isFav);
   const toggleFav = useContext(MonstersContext).toggleFav;
 
   const renderTooltip = (props) => (
@@ -39,7 +41,7 @@ const ButtonTooltip = ({ monster }) => {
         onClick={handleToggleClick}
       >
         <i
-          style={monster.isFav ? { color: 'red' } : { color: 'grey' }}
+          style={isFav ? { color: 'red' } : { color: 'grey' }}
           className='fa-solid fa-heart-circle-plus fa-2xl'
         ></i>
       </Button>
