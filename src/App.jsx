@@ -12,7 +12,7 @@ function App() {
       <Navbar />
       <div className='main'>
         <Routes>
-          <Route path='/' element={<HomeScreen />} exact></Route>
+          <Route path='/' element={<MonstersScreen />} exact></Route>
           <Route path='/monsters' element={<MonstersScreen />} exact></Route>
           <Route path='/characters' element={<CharacterScreen />} exact></Route>
           <Route path='/dungeons' element={<DungeonScreen />} exact></Route>
