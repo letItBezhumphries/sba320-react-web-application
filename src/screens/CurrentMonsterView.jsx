@@ -5,15 +5,15 @@ import ButtonTooltip from '../components/ButtonTooltip';
 const CurrentMonsterView = ({ monster, loading, error }) => {
   const [imgSrc, setImgSrc] = useState('');
 
-  console.log(
-    'monster passed into CurrentMonsterView:',
-    monster,
-    'state imgSrc:',
-    imgSrc
-  );
+  // console.log(
+  //   'monster passed into CurrentMonsterView:',
+  //   monster,
+  //   'state imgSrc:',
+  //   imgSrc
+  // );
   useEffect(() => {
     if (!monster.img_main || monster.img_main === null) {
-      console.log('setting to empty string');
+      // console.log('setting to empty string');
       setImgSrc('');
     } else {
       setImgSrc(monster.img_main);
@@ -115,16 +115,14 @@ const CurrentMonsterView = ({ monster, loading, error }) => {
         ) : null}
       </div>
       <div className='monster-info'>
-        <h3 className='monster-name'>{monster.name}</h3>
-        {/* <p className='type'>
+        <h3 className='monster-name'>
+          {monster.name}
+          <ButtonTooltip monster={monster} />
+        </h3>
+        <p className='type'>
           {monster.size}, {monster.type}, {monster.alignment}
-        </p> */}
-        <div style={{ display: 'flex' }}>
-          <p className='type'>
-            {monster.size}, {monster.type}, {monster.alignment}
-          </p>
-          {monster.img_main === null ? <ButtonTooltip /> : null}
-        </div>
+        </p>
+
         {monster.desc === null || monster.desc === 'False' ? null : (
           <p className='monster-description'>{monster.desc}</p>
         )}

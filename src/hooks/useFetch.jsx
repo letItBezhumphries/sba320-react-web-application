@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 function useFetch(fetchFunction, initialValue, pagination, page) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-  const [data, setData] = useState(initialValue);
+  const [pageData, setPageData] = useState(initialValue);
   const [prev, setPrev] = useState(null);
   const [next, setNext] = useState(null);
 
@@ -15,9 +15,19 @@ function useFetch(fetchFunction, initialValue, pagination, page) {
       setLoading(true);
       try {
         const data = await fetchFunction(page);
-        console.log('data in useFetch:', data);
-        setData(data.results);
+
+        const extendedForFavorites = data.results.map((monster) => {
+          return {
+            ...monster,
+            isFav: false,
+          };
+        });
+
+        // console.log('data in useFetch:', data);
+        setPageData(extendedForFavorites);
+
         if (pagination === true) {
+          // console.log('pagination was passed');
           setPrev(data.previous);
           setNext(data.next);
         }
@@ -28,7 +38,7 @@ function useFetch(fetchFunction, initialValue, pagination, page) {
     }
 
     fetchData();
-  }, [fetchFunction]);
+  }, [fetchFunction, setNext, setPrev]);
 
   /* in return you are able to make the setting function available in components that use this custom hook 
   to manage state
@@ -36,10 +46,10 @@ function useFetch(fetchFunction, initialValue, pagination, page) {
 
   return {
     loading: loading,
-    data: data,
+    pageData: pageData,
     prev: prev,
     next: next,
-    setData,
+    setPageData,
     setNext,
     setPrev,
     setLoading,

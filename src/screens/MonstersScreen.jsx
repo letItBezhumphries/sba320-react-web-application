@@ -5,6 +5,9 @@ import Loader from '../components/Loader';
 import useFetch from '../hooks/useFetch';
 import { useContext } from 'react';
 import { MonstersContext } from '../context/monsters-context';
+import Button from 'react-bootstrap/Button';
+import SideDrawer from '../components/SideDrawer';
+
 import axios from 'axios';
 axios.defaults.headers.common = {
   Accept: 'application/json',
@@ -13,6 +16,8 @@ import { getMonsters } from '../utility/requests';
 import CurrentMonsterView from './CurrentMonsterView';
 
 const MonstersScreen = () => {
+  const [show, setShow] = useState(false);
+
   // passing in [] as second argument for initialValue for state
   const [currentMonsterIndex, setCurrentMonsterIndex] = useState(0);
 
@@ -22,9 +27,9 @@ const MonstersScreen = () => {
 
   const {
     loading,
-    data,
+    pageData,
     error,
-    setData,
+    setPageData,
     next,
     prev,
     setLoading,
@@ -45,7 +50,7 @@ const MonstersScreen = () => {
       setLoading(true);
       const newPage = await axios.get(prev);
       console.log('res:', newPage, 'current prev:', prev);
-      setData(newPage.data);
+      setPageData(newPage.data);
       setPrev(newPage.data.previous);
       setNext(newPage.data.next);
       console.log('new prev:', prev);
@@ -62,7 +67,7 @@ const MonstersScreen = () => {
       setLoading(true);
       const newPage = await axios.get(next);
       console.log('res:', newPage.data, 'current next');
-      setData(newPage.data.results);
+      setPageData(newPage.data.results);
       setNext(newPage.data.next);
       let currentPage = next[next.length - 1];
       console.log('currentPage:', currentPage);
@@ -75,13 +80,18 @@ const MonstersScreen = () => {
     setLoading(false);
   };
 
-  let currentMonster = data[currentMonsterIndex];
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  // console.log('in MonstersScreen currentMonster:', data[currentMonsterIndex]);
+  let currentMonster = monstersList[currentMonsterIndex];
 
   return (
     <div id='monsters'>
-      <h2 className='page-header'>MonstersScreen</h2>
+      <h2 className='page-header'>
+        Search For Monsters{' '}
+        <Button className='view-favs-btn' onClick={handleShow}></Button>
+        {/* <Button className='view-favs-btn'>View Your Favorites</Button> */}
+      </h2>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -92,7 +102,7 @@ const MonstersScreen = () => {
       ) : (
         <div className='page-inner-container'>
           <div className='monster-list-container'>
-            <h4>Search For Monsters</h4>
+            <h4>Available Monsters</h4>
             {/* NEED to hook up the Prev and next buttons */}
             <div className='page-controls-row'>
               <button
@@ -111,8 +121,8 @@ const MonstersScreen = () => {
               </button>
             </div>
             <ul>
-              {!loading && data
-                ? data.map((monster, idx) => (
+              {!loading && pageData
+                ? pageData.map((monster, idx) => (
                     <li key={idx}>
                       <button
                         className='monster-btn'
@@ -138,6 +148,7 @@ const MonstersScreen = () => {
           </section>
         </div>
       )}
+      <SideDrawer show={show} handleClose={handleClose} />
     </div>
   );
 };

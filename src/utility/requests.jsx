@@ -7,7 +7,7 @@ axios.defaults.headers.common = {
 export const getMonsters = async () => {
   try {
     const response = await axios.get(APIURL);
-    console.log('response in getMonsters:', response.data);
+    // console.log('response in getMonsters:', response.data);
     return response.data;
   } catch (error) {
     console.log('error:', error);

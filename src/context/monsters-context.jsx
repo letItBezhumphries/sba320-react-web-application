@@ -1,66 +1,52 @@
 import { createContext } from 'react';
-import { useState, useEffect } from 'react';
 import useFetch from '../hooks/useFetch';
 import { getMonsters, getMonstersPage } from '../utility/requests';
 
 export const MonstersContext = createContext({
   monstersList: [],
-  favorites: [],
   loading: true,
   error: {},
   next: '',
   prev: '',
+  toggleFav: (slug) => {},
 });
 
 export default (props) => {
-  const [monstersList, setMonstersList] = useState([]);
-  const {
-    loading,
-    data,
-    error,
-    setData,
-    next,
-    prev,
-    setLoading,
-    setError,
-    setNext,
-    setPrev,
-  } = useFetch(getMonsters, [], true);
+  const { loading, pageData, next, prev, setPageData } = useFetch(
+    getMonsters,
+    [],
+    true
+  );
 
-  // let extendedData = data.map((monster) => {
-  //   return {
-  //     ...monster,
-  //     isFav: false,
-  //   };
-  // });
-  // setMonstersList(extendedData);
+  console.log('loading:', loading, 'pageData:', pageData);
 
-  // console.log('loading:', loading, 'data:', monstersList);
+  const toggleFav = (slug) => {
+    setPageData((currentMonstersList) => {
+      const monsterIndex = currentMonstersList.findIndex(
+        (monster) => monster.slug === slug
+      );
+      const newFav = !currentMonstersList[monsterIndex].isFav;
+      const updatedMonsters = [...currentMonstersList];
+      updatedMonsters[monsterIndex] = {
+        ...currentMonstersList[monsterIndex],
+        isFav: newFav,
+      };
 
-  // const toggleFav = (slug) => {
-  //   setMonstersList((currentMonstersList) => {
-  //     const monsterIndex = currentMonstersList.findIndex(
-  //       (monster) => monster.slug === slug
-  //     );
-  //     const newFav = !currentMonstersList[monsterIndex].isFav;
-  //     const updatedMonsters = [...currentMonstersList];
-  //     updatedMonsters[monsterIndex] = {
-  //       ...currentMonstersList[monsterIndex],
-  //       isFav: newFav,
-  //     };
+      console.log('mosnter to update', monsterIndex);
 
-  //     // setFavoriteMonsters((currentFavs) => {
-  //     //   return [...currentFavs, updatedMonsters[monsterIndex]];
-  //     // });
-  //     console.log('mosnter to update', monsterIndex);
-
-  //     return updatedMonsters;
-  //   });
-  // };
+      return updatedMonsters;
+    });
+  };
 
   return (
     <MonstersContext.Provider
-      value={{ monstersList: data, loading: loading, prev: prev, next: next }}
+      value={{
+        monstersList: pageData,
+        loading: loading,
+        prev: prev,
+        next: next,
+        toggleFav: toggleFav,
+      }}
     >
       {props.children}
     </MonstersContext.Provider>
