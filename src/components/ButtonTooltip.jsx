@@ -5,10 +5,10 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useContext } from 'react';
 import { MonstersContext } from '../context/monsters-context';
 
-const ButtonTooltip = ({ monster }) => {
-  const { isFav } = monster;
-  console.log('isFav in button tooltip:', isFav);
+const ButtonTooltip = ({ monster, loading }) => {
   const toggleFav = useContext(MonstersContext).toggleFav;
+
+  console.log('what is passed to ButtonTooltip for monster:', monster);
 
   const renderTooltip = (props) => (
     <Tooltip id='button-tooltip' {...props}>
@@ -40,10 +40,12 @@ const ButtonTooltip = ({ monster }) => {
         }}
         onClick={handleToggleClick}
       >
-        <i
-          style={isFav ? { color: 'red' } : { color: 'grey' }}
-          className='fa-solid fa-heart-circle-plus fa-2xl'
-        ></i>
+        {!loading && monster ? (
+          <i
+            style={monster.isFav ? { color: 'red' } : { color: 'grey' }}
+            className='fa-solid fa-heart-circle-plus fa-2xl'
+          ></i>
+        ) : null}
       </Button>
     </OverlayTrigger>
   );

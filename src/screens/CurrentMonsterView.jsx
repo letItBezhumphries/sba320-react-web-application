@@ -117,7 +117,9 @@ const CurrentMonsterView = ({ monster, loading, error }) => {
       <div className='monster-info'>
         <h3 className='monster-name'>
           {monster.name}
-          <ButtonTooltip monster={monster} />
+          {!loading && monster ? (
+            <ButtonTooltip monster={monster} loading={loading} />
+          ) : null}
         </h3>
         <p className='type'>
           {monster.size}, {monster.type}, {monster.alignment}
